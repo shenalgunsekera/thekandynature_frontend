@@ -10,7 +10,7 @@ export const SITE = {
   phone2: "077 317 7917",
   // wa.me format: country code + number, no spaces or leading 0
   whatsapp: "94777868576",
-  email: "hello@thenaturekandy.lk",
+  email: "theheightsretreat@gmail.com",
 };
 
 // size drives the mosaic: "big" (2x2), "wide" (2x1), "tall" (1x2), "" (1x1).
