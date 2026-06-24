@@ -33,6 +33,19 @@ export default function BookingsCalendar() {
   };
   useEffect(() => { load(); }, []);
 
+  // modal behaviour for the selected-day popup
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e) => { if (e.key === "Escape") setSelected(null); };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [selected]);
+
   const byDate = useMemo(() => {
     const map = {};
     for (const b of bookings) (map[b.date] ||= []).push(b);
@@ -155,7 +168,8 @@ export default function BookingsCalendar() {
       </div>
 
       {selected && (
-        <div className="cal__panel">
+        <div className="cal__modal" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) setSelected(null); }}>
+          <div className="cal__dialog">
           <div className="cal__panel-head">
             <h3>{selectedPretty}</h3>
             <button className="cal__x" onClick={() => setSelected(null)} aria-label="Close">×</button>
@@ -209,6 +223,7 @@ export default function BookingsCalendar() {
               {busy ? "Saving…" : "Add booking"}
             </button>
           </form>
+          </div>
         </div>
       )}
 
