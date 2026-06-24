@@ -1,0 +1,23 @@
+{
+  "name": "the-nature-kandy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "enhance": "node scripts/enhance-images.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.0.0",
+    "framer-motion": "^11.11.17",
+    "next": "14.2.15",
+    "nodemailer": "^9.0.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "ffmpeg-static": "^5.3.0",
+    "sharp": "^0.33.5"
+  }
+}

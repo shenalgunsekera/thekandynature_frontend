@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Users/MSI/.claude/skills/ 2>/dev/null && echo \"---\" || echo \"no skills dir yet\")",
+      "Read(//c/Users/MSI/.claude/skills//**)",
+      "Edit(~/.claude/skills/remotion/**)",
+      "Edit(~/.claude/skills/seo/**)",
+      "Edit(~/.claude/skills/openmontage/**)",
+      "Bash(gh search *)",
+      "Bash(gh --version)",
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Edit(~/.claude/skills/headroom/**)"
+    ]
+  }
+}

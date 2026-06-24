@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 200" width="2080" height="400">
+  <g fill="none" stroke="#e8b15a" stroke-width="6" stroke-linecap="round" stroke-linejoin="miter">
+    <path d="M24 150 L72 66 L104 110 L142 50 L190 150"/>
+  </g>
+  <circle cx="152" cy="38" r="11" fill="#e8b15a"/>
+  <line x1="18" y1="150" x2="196" y2="150" stroke="#e8b15a" stroke-width="3" opacity="0.45"/>
+  <text x="236" y="128" font-family="Georgia, 'Times New Roman', serif" font-size="80" letter-spacing="1" fill="#f4f1ea">The <tspan fill="#e8b15a">Heights</tspan> Retreat</text>
+</svg>
