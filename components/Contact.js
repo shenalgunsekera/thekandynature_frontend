@@ -7,7 +7,7 @@ import LeafField from "./LeafField";
 import { SITE } from "@/data/site";
 import { Pin, Phone, Mail, Arrow } from "./icons";
 
-const EMPTY = { name: "", email: "", phone: "", message: "", newsletter: false, consent: false };
+const EMPTY = { name: "", email: "", phone: "", checkin: "", checkout: "", message: "", newsletter: false, consent: false };
 const telHref = (p) => "tel:+94" + p.replace(/\D/g, "").replace(/^0/, "");
 
 export default function Contact() {
@@ -84,6 +84,16 @@ export default function Contact() {
                   <div className="field">
                     <label htmlFor="phone">{f.phone}</label>
                     <input id="phone" name="phone" type="tel" value={form.phone} onChange={update} autoComplete="tel" placeholder={f.phonePh} />
+                  </div>
+                </div>
+                <div className="field--row">
+                  <div className="field">
+                    <label htmlFor="checkin">{f.checkin}</label>
+                    <input id="checkin" name="checkin" type="date" value={form.checkin} onChange={update} />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="checkout">{f.checkout}</label>
+                    <input id="checkout" name="checkout" type="date" value={form.checkout} onChange={update} min={form.checkin || undefined} />
                   </div>
                 </div>
                 <div className="field">

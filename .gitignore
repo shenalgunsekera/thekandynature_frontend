@@ -3,6 +3,8 @@
 /out
 /build
 .env*.local
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
 .DS_Store
 *.log
 /data/bookings.json

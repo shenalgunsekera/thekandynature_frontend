@@ -19,6 +19,8 @@ export async function POST(request) {
   const name = String(body.name || "").trim().slice(0, 120);
   const email = String(body.email || "").trim().slice(0, 160);
   const phone = String(body.phone || "").trim().slice(0, 40);
+  const checkin = String(body.checkin || "").trim().slice(0, 20);
+  const checkout = String(body.checkout || "").trim().slice(0, 20);
   const message = String(body.message || "").trim().slice(0, 2000);
   const newsletter = Boolean(body.newsletter);
   const consent = Boolean(body.consent);
@@ -33,6 +35,8 @@ export async function POST(request) {
     name,
     email,
     phone,
+    checkin,
+    checkout,
     message,
     newsletter,
     source: "website-inquiry",
@@ -73,6 +77,7 @@ export async function POST(request) {
     `Email: ${email}`,
   ];
   if (phone) lines.push(`Phone: ${phone}`);
+  if (checkin || checkout) lines.push(`Dates: ${checkin || "?"} → ${checkout || "?"}`);
   lines.push("", message);
   const whatsappUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
 

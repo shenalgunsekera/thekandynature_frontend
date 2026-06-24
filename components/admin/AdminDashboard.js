@@ -58,6 +58,8 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
         { key: "name", label: "Name" },
         { key: "email", label: "Email" },
         { key: "phone", label: "Phone" },
+        { key: "checkin", label: "Check-in" },
+        { key: "checkout", label: "Check-out" },
         { key: "newsletter", label: "Newsletter" },
         { key: "message", label: "Message" },
       ])
@@ -130,7 +132,7 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
                 <table className="admin__table">
                   <thead>
                     <tr>
-                      <th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>News</th><th>Message</th>
+                      <th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Stay</th><th>News</th><th>Message</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -140,6 +142,7 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
                         <td>{l.name}</td>
                         <td><a href={`mailto:${l.email}`}>{l.email}</a></td>
                         <td className="nowrap">{l.phone || "—"}</td>
+                        <td className="nowrap">{l.checkin || l.checkout ? `${l.checkin || "?"} → ${l.checkout || "?"}` : "—"}</td>
                         <td>{l.newsletter ? "✓" : "—"}</td>
                         <td className="admin__msg">{l.message}</td>
                       </tr>
