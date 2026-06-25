@@ -767,6 +767,53 @@ textarea:focus-visible {
 }
 .form--done { display: grid; gap: var(--space-4); }
 
+/* ---------- availability date picker ---------- */
+.datepick { position: relative; }
+.datepick__trigger {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: var(--bg-2); border: 1px solid var(--border-soft); color: var(--text);
+  padding: 10px 14px; font: inherit; cursor: pointer; text-align: left;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.datepick__trigger:hover { border-color: var(--moss); }
+.datepick__trigger:focus-visible { outline: none; border-color: var(--moss); box-shadow: 0 0 0 3px rgba(127,176,105,.18); }
+.datepick__field { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+.datepick__field small { font-size: 11px; color: var(--muted); }
+.datepick__field > span { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.datepick__ph { color: var(--muted); }
+.datepick__arrow { color: var(--gold); flex: none; }
+.datepick__icon { color: var(--gold); flex: none; }
+.datepick__pop {
+  position: absolute; z-index: 30; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--surface-solid); border: 1px solid var(--border);
+  box-shadow: 0 30px 60px -24px rgba(0,0,0,.85); padding: 14px;
+  animation: calPop .2s var(--ease);
+}
+.datepick__bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.datepick__bar strong { font-family: var(--font-display); font-size: 1rem; }
+.datepick__bar button { width: 30px; height: 30px; border: 1px solid var(--border-soft); background: var(--surface); color: var(--text); cursor: pointer; font-size: 16px; }
+.datepick__bar button:hover { border-color: var(--moss); }
+.datepick__wd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px; }
+.datepick__wd span { text-align: center; font-size: 11px; color: var(--muted); padding: 4px 0; }
+.datepick__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.datepick__grid > span { aspect-ratio: 1; }
+.datepick__day {
+  aspect-ratio: 1; width: 100%; border: none; background: transparent; color: var(--text-soft);
+  font: inherit; font-size: 13px; cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease);
+}
+.datepick__day:hover:not(:disabled) { background: var(--forest); color: #fff; }
+.datepick__day:disabled { color: #4a4d55; cursor: not-allowed; }
+.datepick__day.is-today { box-shadow: inset 0 0 0 1px var(--border); }
+.datepick__day.is-range { background: rgba(232,177,90,.16); color: var(--text); }
+.datepick__day.is-sel { background: var(--gold); color: #20160a; font-weight: 700; }
+.datepick__day.is-booked { color: #7a544d; text-decoration: line-through; background: rgba(214,109,92,.12); }
+.datepick__legend { display: flex; align-items: center; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-soft); font-size: 12px; color: var(--muted); }
+.datepick__legend .dot { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: middle; }
+.dot--booked { background: rgba(214,109,92,.6); }
+.dot--sel { background: var(--gold); }
+.datepick__clear { margin-left: auto; background: none; border: none; color: var(--gold); cursor: pointer; font: inherit; font-size: 12px; }
+
 /* ---------- admin panel ---------- */
 .admin { min-height: 100vh; }
 .admin__bar {
@@ -862,7 +909,21 @@ textarea:focus-visible {
 .cal__dot--completed { background: var(--moss); }
 .cal__dot--cancelled { background: #d66d5c; }
 .cal__more { font-size: 10px; color: var(--muted); }
-.cal__panel { margin-top: var(--space-5); border: 1px solid var(--border-soft); background: var(--bg-2); padding: var(--space-5); }
+.cal__modal {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(6,8,11,.68); backdrop-filter: blur(7px);
+  display: grid; place-items: center; padding: 20px;
+  animation: calFade .2s var(--ease);
+}
+.cal__dialog {
+  width: 100%; max-width: 540px; max-height: 86vh; overflow: auto;
+  background: var(--surface-solid); border: 1px solid var(--border);
+  box-shadow: 0 44px 90px -30px rgba(0,0,0,.85);
+  padding: var(--space-6);
+  animation: calPop .26s var(--ease);
+}
+@keyframes calFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes calPop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
 .cal__panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cal__panel-head h3 { margin: 0; font-size: 1.15rem; }
 .cal__x { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; }

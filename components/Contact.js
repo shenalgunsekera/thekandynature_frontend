@@ -5,6 +5,7 @@ import { useLang } from "@/lib/i18n";
 import Reveal from "./Reveal";
 import LeafField from "./LeafField";
 import { SITE } from "@/data/site";
+import AvailabilityDates from "./AvailabilityDates";
 import { Pin, Phone, Mail, Arrow } from "./icons";
 
 const EMPTY = { name: "", email: "", phone: "", checkin: "", checkout: "", message: "", newsletter: false, consent: false };
@@ -86,15 +87,14 @@ export default function Contact() {
                     <input id="phone" name="phone" type="tel" value={form.phone} onChange={update} autoComplete="tel" placeholder={f.phonePh} />
                   </div>
                 </div>
-                <div className="field--row">
-                  <div className="field">
-                    <label htmlFor="checkin">{f.checkin}</label>
-                    <input id="checkin" name="checkin" type="date" value={form.checkin} onChange={update} />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="checkout">{f.checkout}</label>
-                    <input id="checkout" name="checkout" type="date" value={form.checkout} onChange={update} min={form.checkin || undefined} />
-                  </div>
+                <div className="field">
+                  <label>{f.dates}</label>
+                  <AvailabilityDates
+                    checkin={form.checkin}
+                    checkout={form.checkout}
+                    onChange={(ci, co) => setForm((s) => ({ ...s, checkin: ci, checkout: co }))}
+                    labels={{ checkin: f.checkin, checkout: f.checkout, pick: f.pickDates, booked: f.booked, selected: f.selected, clear: f.clear }}
+                  />
                 </div>
                 <div className="field">
                   <label htmlFor="message">{f.message}</label>
