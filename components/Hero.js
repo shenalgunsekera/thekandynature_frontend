@@ -33,6 +33,7 @@ export default function Hero() {
           onPlaying={signalReady}
           onCanPlay={signalReady}
           onError={signalReady}
+          onLoadedMetadata={(e) => { e.currentTarget.playbackRate = 0.65; }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>

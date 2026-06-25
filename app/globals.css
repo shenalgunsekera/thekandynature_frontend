@@ -864,6 +864,12 @@ textarea:focus-visible {
 .admin__table .nowrap { white-space: nowrap; }
 .admin__msg { max-width: 360px; white-space: pre-wrap; }
 .admin__empty { color: var(--muted); padding: 40px; text-align: center; border: 1px dashed var(--border-soft); }
+.admin__del {
+  background: none; border: 1px solid var(--border-soft); color: var(--muted);
+  width: 28px; height: 28px; cursor: pointer; font-size: 13px; line-height: 1;
+  transition: color .15s var(--ease), border-color .15s var(--ease);
+}
+.admin__del:hover { color: #e0a99c; border-color: #d66d5c; }
 
 .admin-auth { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
 .admin-auth__card {

@@ -31,29 +31,38 @@ function download(name, text, type = "text/csv") {
 export default function AdminDashboard({ leads, subscribers, mode }) {
   const [tab, setTab] = useState("leads");
   const [q, setQ] = useState("");
+  const [removed, setRemoved] = useState(() => new Set());
 
   const logout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
     window.location.reload();
   };
 
+  const visibleLeads = useMemo(() => leads.filter((l) => !removed.has(l.id)), [leads, removed]);
+
+  const deleteLead = async (id) => {
+    if (!window.confirm("Delete this lead? This cannot be undone.")) return;
+    setRemoved((s) => new Set(s).add(id));
+    await fetch(`/api/admin/leads/${id}`, { method: "DELETE" });
+  };
+
   const filtered = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t) return leads;
-    return leads.filter((l) =>
+    if (!t) return visibleLeads;
+    return visibleLeads.filter((l) =>
       [l.name, l.email, l.phone, l.message].some((v) => String(v || "").toLowerCase().includes(t))
     );
-  }, [leads, q]);
+  }, [visibleLeads, q]);
 
   const newsletterCount = useMemo(
-    () => subscribers.length || leads.filter((l) => l.newsletter).length,
-    [subscribers, leads]
+    () => subscribers.length || visibleLeads.filter((l) => l.newsletter).length,
+    [subscribers, visibleLeads]
   );
 
   const exportLeads = () =>
     download(
       "heights-retreat-leads.csv",
-      toCSV(leads, [
+      toCSV(visibleLeads, [
         { key: "receivedAt", label: "Date" },
         { key: "name", label: "Name" },
         { key: "email", label: "Email" },
@@ -91,9 +100,9 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
 
       <main className="admin__main">
         <div className="admin__stats">
-          <div className="admin__stat"><b>{leads.length}</b><span>Total leads</span></div>
+          <div className="admin__stat"><b>{visibleLeads.length}</b><span>Total leads</span></div>
           <div className="admin__stat"><b>{newsletterCount}</b><span>Newsletter sign-ups</span></div>
-          <div className="admin__stat"><b>{leads.filter((l) => {
+          <div className="admin__stat"><b>{visibleLeads.filter((l) => {
             const d = new Date(l.receivedAt || l.createdAt);
             return !isNaN(d) && Date.now() - d.getTime() < 7 * 864e5;
           }).length}</b><span>Last 7 days</span></div>
@@ -101,7 +110,7 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
 
         <div className="admin__tabs">
           <button className={tab === "leads" ? "is-active" : ""} onClick={() => setTab("leads")}>
-            Leads ({leads.length})
+            Leads ({visibleLeads.length})
           </button>
           <button className={tab === "calendar" ? "is-active" : ""} onClick={() => setTab("calendar")}>
             Bookings calendar
@@ -132,7 +141,7 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
                 <table className="admin__table">
                   <thead>
                     <tr>
-                      <th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Stay</th><th>News</th><th>Message</th>
+                      <th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Stay</th><th>News</th><th>Message</th><th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -145,6 +154,7 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
                         <td className="nowrap">{l.checkin || l.checkout ? `${l.checkin || "?"} → ${l.checkout || "?"}` : "—"}</td>
                         <td>{l.newsletter ? "✓" : "—"}</td>
                         <td className="admin__msg">{l.message}</td>
+                        <td><button className="admin__del" onClick={() => deleteLead(l.id)} title="Delete lead" aria-label="Delete lead">✕</button></td>
                       </tr>
                     ))}
                   </tbody>

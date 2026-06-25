@@ -10,6 +10,17 @@ const pad = (n) => String(n).padStart(2, "0");
 const ymd = (y, m, d) => `${y}-${pad(m + 1)}-${pad(d)}`;
 const money = (n) => "Rs " + Number(n || 0).toLocaleString();
 
+const csvCell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+function downloadCSV(name, text) {
+  const blob = new Blob([text], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function BookingsCalendar() {
   const today = new Date();
   const [view, setView] = useState({ y: today.getFullYear(), m: today.getMonth() });
@@ -80,6 +91,23 @@ export default function BookingsCalendar() {
   };
   const goToday = () => setView({ y: today.getFullYear(), m: today.getMonth() });
 
+  const exportCSV = () => {
+    const rows = [...bookings].sort((a, b) => (String(a.date) > String(b.date) ? 1 : -1));
+    const head = ["Date", "Month", "Guest", "Amount", "Status", "Notes"].map(csvCell).join(",");
+    const body = rows.map((b) =>
+      [b.date, String(b.date || "").slice(0, 7), b.guest, b.amount, b.status, b.notes].map(csvCell).join(",")
+    );
+    const months = {};
+    for (const b of bookings) {
+      if (b.date && b.status !== "cancelled") {
+        const m = b.date.slice(0, 7);
+        months[m] = (months[m] || 0) + (Number(b.amount) || 0);
+      }
+    }
+    const totals = ["", "Month,Total revenue", ...Object.entries(months).sort().map(([m, t]) => `${m},${t}`)];
+    downloadCSV("heights-retreat-bookings.csv", [head, ...body, ...totals].join("\n"));
+  };
+
   const addBooking = async (e) => {
     e.preventDefault();
     if (!selected || !draft.guest.trim()) return;
@@ -134,6 +162,7 @@ export default function BookingsCalendar() {
         </div>
         <div className="cal__legend">
           {STATUSES.map((s) => <span key={s} className={`cal__chip cal__chip--${s}`}>{s}</span>)}
+          <button className="btn btn--ghost" style={{ minHeight: 36, padding: "6px 14px" }} onClick={exportCSV}>Export CSV</button>
           <button className="btn btn--ghost" style={{ minHeight: 36, padding: "6px 14px" }} onClick={goToday}>Today</button>
         </div>
       </div>
