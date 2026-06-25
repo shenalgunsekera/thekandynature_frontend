@@ -24,6 +24,7 @@ export default function Header() {
     { href: "#about", label: t.nav.place },
     { href: "#amenities", label: t.nav.amenities },
     { href: "#gallery", label: t.nav.gallery },
+    { href: "#reviews", label: t.nav.reviews },
     { href: "#contact", label: t.contact.navLabel },
   ];
 

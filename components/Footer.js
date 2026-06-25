@@ -26,6 +26,7 @@ export default function Footer() {
             <a href="#about">{t.nav.place}</a>
             <a href="#amenities">{t.nav.amenities}</a>
             <a href="#gallery">{t.nav.gallery}</a>
+            <a href="#reviews">{t.nav.reviews}</a>
             <a href="#contact">{t.contact.navLabel}</a>
           </div>
 

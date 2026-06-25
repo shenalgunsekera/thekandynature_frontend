@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { listLeads, listSubscribers, storageMode } from "@/lib/store";
+import { listLeads, listSubscribers, listReviews, storageMode } from "@/lib/store";
 import AdminLogin from "@/components/admin/AdminLogin";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
@@ -15,6 +15,6 @@ export default async function AdminPage() {
 
   if (!authed) return <AdminLogin />;
 
-  const [leads, subscribers] = await Promise.all([listLeads(), listSubscribers()]);
-  return <AdminDashboard leads={leads} subscribers={subscribers} mode={storageMode()} />;
+  const [leads, subscribers, reviews] = await Promise.all([listLeads(), listSubscribers(), listReviews()]);
+  return <AdminDashboard leads={leads} subscribers={subscribers} reviews={reviews} mode={storageMode()} />;
 }

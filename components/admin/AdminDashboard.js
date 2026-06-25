@@ -28,10 +28,11 @@ function download(name, text, type = "text/csv") {
   URL.revokeObjectURL(url);
 }
 
-export default function AdminDashboard({ leads, subscribers, mode }) {
+export default function AdminDashboard({ leads, subscribers, reviews = [], mode }) {
   const [tab, setTab] = useState("leads");
   const [q, setQ] = useState("");
   const [removed, setRemoved] = useState(() => new Set());
+  const [removedReviews, setRemovedReviews] = useState(() => new Set());
 
   const logout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -44,6 +45,13 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
     if (!window.confirm("Delete this lead? This cannot be undone.")) return;
     setRemoved((s) => new Set(s).add(id));
     await fetch(`/api/admin/leads/${id}`, { method: "DELETE" });
+  };
+
+  const visibleReviews = useMemo(() => reviews.filter((r) => !removedReviews.has(r.id)), [reviews, removedReviews]);
+  const deleteReview = async (id) => {
+    if (!window.confirm("Delete this review? It will be removed from the website.")) return;
+    setRemovedReviews((s) => new Set(s).add(id));
+    await fetch(`/api/admin/reviews/${id}`, { method: "DELETE" });
   };
 
   const filtered = useMemo(() => {
@@ -118,6 +126,9 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
           <button className={tab === "subs" ? "is-active" : ""} onClick={() => setTab("subs")}>
             Newsletter ({subscribers.length})
           </button>
+          <button className={tab === "reviews" ? "is-active" : ""} onClick={() => setTab("reviews")}>
+            Reviews ({visibleReviews.length})
+          </button>
         </div>
 
         {tab === "leads" && (
@@ -190,6 +201,29 @@ export default function AdminDashboard({ leads, subscribers, mode }) {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </section>
+        )}
+        {tab === "reviews" && (
+          <section>
+            {visibleReviews.length === 0 ? (
+              <p className="admin__empty">No reviews yet.</p>
+            ) : (
+              <div className="admin__reviews">
+                {visibleReviews.map((rev) => (
+                  <div className="admin__review" key={rev.id}>
+                    <div>
+                      <div className="admin__review-head">
+                        <b>{rev.name}</b>
+                        <span className="admin__stars">{"★".repeat(Math.max(0, Math.min(5, rev.rating || 0)))}</span>
+                        <span className="muted">{fmtDate(rev.createdAt)}</span>
+                      </div>
+                      <p className="admin__review-text">{rev.comment}</p>
+                    </div>
+                    <button className="admin__del" onClick={() => deleteReview(rev.id)} title="Delete review" aria-label="Delete review">✕</button>
+                  </div>
+                ))}
               </div>
             )}
           </section>
